@@ -1,0 +1,17 @@
+#headerContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-bottom: 2px solid rgb(114, 114, 114);
+
+    p{
+        font-weight: 500;
+        font-size: 2rem;
+    }
+
+    i{
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+}

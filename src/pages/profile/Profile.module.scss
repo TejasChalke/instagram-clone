@@ -1,0 +1,85 @@
+#profileContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    padding: 1rem;
+
+    #profileInfo{
+        display: grid;
+        grid-template-columns: 35% 1fr;
+        gap: 1rem;
+
+        img{
+            aspect-ratio: 1/1;
+            width: 150px;
+            border-radius: 50%;
+            border: 2px solid black;
+            padding: .5rem;
+        }
+
+        .text{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            padding: 1rem 0rem;
+
+            .big{
+                font-size: 2rem;
+                font-weight: 500;
+            }
+            
+            .med{
+                font-size: 1.5rem;
+            }
+        }
+        
+        .col2{
+            grid-column: span 2;
+        }
+    }
+
+    #followerInfo{
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 1rem;
+
+        .med{
+            font-size: 1.5rem;
+
+            span{
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
+
+    #postsContainer{
+        width: 100%;
+        margin-top: 1rem;
+
+        .med{
+            font-size: 1.5rem;
+        }
+
+        #posts{
+            display: grid;
+            place-items: center;
+            min-height: 200px;
+            margin-top: .5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+
+            .big{
+                grid-column: span 2;
+                font-size: 1.5rem;
+                font-weight: 500;
+            }
+        }
+    }
+}
