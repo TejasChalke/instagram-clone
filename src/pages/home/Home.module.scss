@@ -1,0 +1,97 @@
+#container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--large-padding);
+
+    .title{
+        font-size: 2.2rem;
+        font-weight: 500;
+    }
+
+    #form{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 100%;
+
+        padding: 1rem;
+
+        .formItem{
+            width: 100%;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+
+            .labels{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .link{
+                    color: var(--color-primary);
+                    font-size: 1.2rem;
+                    cursor: pointer;
+                    outline: none;
+                    
+                    &:focus{
+                        color: var(--color-primary-dark);
+                        font-size: 1.3rem;
+                    }
+                }
+            }
+
+            input{
+                width: 100%;
+                font-size: 1.5rem;
+                margin-top: .5rem;
+                padding: .25rem .5rem;
+                border-radius: 10px;
+                border: 1px solid black;
+                
+                &:focus{
+                    border-color: white;
+                    outline: 1px solid var(--color-primary);
+                }
+            }
+        }
+
+        input[type = button]{
+            all: unset;
+            user-select: all;
+            font-size: 1.5rem;
+            width: 80%;
+            text-align: center;
+            cursor: pointer;
+
+            padding: .25rem 0;
+            border-radius: 10px;
+            margin: 1rem auto;
+            color: white;
+            background-color: var(--color-primary);
+            
+            &:focus{
+                outline: 2px solid var(--color-primary-dark);
+            }
+        }
+    }
+
+    .msg{
+        font-size: 1.2rem;
+
+        .link{
+            color: var(--color-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            outline: none;
+            margin-left: .5rem;
+            
+            &:focus{
+                color: var(--color-primary-dark);
+                font-size: 1.3rem;
+            }
+        }
+    }
+}

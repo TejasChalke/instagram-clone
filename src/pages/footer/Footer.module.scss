@@ -1,5 +1,5 @@
 #footerContainer{
-    position: absolute;
+    position: fixed;
     width: 100%;
     left: 0px;
     bottom: 0px;
@@ -7,7 +7,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-
+    background-color: white;
     padding: .5rem 1rem;
 
     border-top: 2px solid rgb(114, 114, 114);
