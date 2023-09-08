@@ -4,6 +4,10 @@ import s from './Home.module.scss'
 export default function Signup(){
     const navigate = useNavigate();
 
+    function signup(){
+        console.log("signup")
+    }
+
     return(
         <div id={s.container}>
             <div className={s.title}>Sign up for Instagram</div>
@@ -32,7 +36,12 @@ export default function Signup(){
                     </div>
                     <input type="password" name="signup-pass" id="signup-pass" />
                 </div>
-                <input type="button" value="Sign Up" />
+                <input
+                    type="button"
+                    value="Sign Up"
+                    onClick={signup}
+                    onKeyDown={signup}
+                />
             </div>
             <div className={s.msg}>
                 <p>

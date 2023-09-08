@@ -9,6 +9,7 @@ import { UserContext } from './contexts/UserContext';
 import { RandomUsersContext } from './contexts/RandomUsers';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
+import Listing from './pages/listing/Listing';
 
 function App() {
   //creating state of the user that might be signed in
@@ -32,6 +33,7 @@ function App() {
             <Route path='/feed' element={<Feed />} />
             <Route path='/search' element={<Search />} />
             <Route path='/profile' element={<Profile />} />
+            <Route path='/listing' element={<Listing />} />
           </Routes>
         </BrowserRouter>
       </RandomUsersContext.Provider>

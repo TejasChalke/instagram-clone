@@ -51,12 +51,30 @@ export default function Profile(){
 
                 <div id={s.followerInfo}>
                     <p className={s.med}>
-                        <span>
+                        <span onClick={
+                            () => {
+                                navigate('/listing',{
+                                    state: {
+                                        type: 1,
+                                        id: user_data.id
+                                    }
+                                })
+                            }
+                        }>
                             {user_data.followers !== undefined ? user_data.followers : 69}
                         </span> Followers
                     </p>
                     <p className={s.med}>
-                        <span>
+                    <span onClick={
+                            () => {
+                                navigate('/listing',{
+                                    state: {
+                                        type: 2,
+                                        id: user_data.id
+                                    }
+                                })
+                            }
+                        }>
                             {user_data.following !== undefined ? user_data.following : 420}
                         </span> Following
                     </p>

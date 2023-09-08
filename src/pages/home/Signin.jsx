@@ -69,7 +69,12 @@ export default function Signin(){
                     </div>
                     <input type="password" name="pass" id="pass" />
                 </div>
-                <input type="button" value="Sign In" onClick={signin}/>
+                <input
+                    type="button"
+                    value="Sign In"
+                    onClick={signin}
+                    onKeyDown={signin}
+                />
             </div>
             <div className={s.msg}>
                 <p>
