@@ -4,19 +4,22 @@
     justify-content: flex-start;
     align-items: center;
 
-    padding: 1rem;
+    padding: var(--small-padding);
 
     #profileInfo{
         display: grid;
         grid-template-columns: 35% 1fr;
         gap: 1rem;
+        width: 100%;
 
         img{
             aspect-ratio: 1/1;
-            width: 150px;
+            width: 120px;
             border-radius: 50%;
             border: 2px solid black;
             padding: .5rem;
+            align-self: center;
+            justify-self: center;
         }
 
         .text{
@@ -28,17 +31,20 @@
             padding: 1rem 0rem;
 
             .big{
-                font-size: 2rem;
+                font-size: 1.6rem;
                 font-weight: 500;
+                text-transform: capitalize;
             }
             
             .med{
-                font-size: 1.5rem;
+                font-size: 1.2rem;
+                color: gray;
             }
         }
         
         .col2{
             grid-column: span 2;
+            text-align: center;
         }
     }
 
@@ -56,6 +62,30 @@
                 font-weight: 500;
                 cursor: pointer;
             }
+        }
+    }
+
+    #buttons{
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 1rem;
+
+        .btn{
+            font-size: 1.5rem;
+            background-color:#0094f5;
+            color: white;
+            text-align: center;
+            padding: .5rem 3rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .white{
+            color: black;
+            background-color: rgb(227, 226, 226);
+            border: 1px solid black;
         }
     }
 
