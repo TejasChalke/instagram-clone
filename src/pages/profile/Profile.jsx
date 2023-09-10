@@ -3,25 +3,160 @@ import Header from '../header/Header';
 import Footer from '../footer/Footer';
 
 import { useLocation, useNavigate } from "react-router-dom"
-import { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { UserContext } from '../../contexts/UserContext';
 import { RandomUsersContext } from '../../contexts/RandomUsers';
 
 export default function Profile(){
-    const {setUserData} = useContext(UserContext);
+    const {userData, setUserData} = useContext(UserContext);
     const {setRandomUsersData} = useContext(RandomUsersContext);
+
     const navigate = useNavigate();
+    const [pageType, setPageType] = React.useState();
+
 
     const {state} = useLocation();
-    const user_data = (state !== undefined && state !== null) ? state.data : {};
+    const profileData = (state !== undefined && state !== null) ? state.data : {};
+    const [followData, setFollowData] = React.useState({
+        followers: 0,
+        following: 0
+    });
     
-    // if type is 2 then check with database whether the person is followed or not
-    const profile_type = (state !== undefined && state !== null) ? state.type : 1;
+    
+    // used for setting the type of page to be showed
+    useEffect(() => {
+        if(state === undefined || state === null || userData.id === undefined){
+            navigate('/signin');
+            return;
+        }
+
+        async function checkFriends(){
+            // userId is the person's id whose profile we are visting
+            // followerId is the current logged in user
+            // result 0 indicates current user does not follow the person 
+            // result 1 indicates current user follows the person 
+
+            const result = await fetch(`http://localhost:8080/checkfriends?userId=${state.data.id}&followerId=${userData.id}`).then(res => res.json())
+
+
+            if(result === 1){
+                setPageType(3);
+            }else{
+                setPageType(2);
+            }
+        }
+        
+
+        if(userData.id === state.data.id){
+            setPageType(1);
+        }else{
+            checkFriends();
+        }
+
+    }, [pageType, state, userData, navigate])
+
+
+    //used for setting the follower and following count
+    useEffect(() => {
+        if(state === undefined || state === null){
+            navigate('/signin');
+            return;
+        }
+
+        async function getFollowersCount(){
+            const count = await fetch(`http://localhost:8080/getfollowercount?userId=${state.data.id}`, {
+                method: 'get'
+            })
+            .then(res => res.text())
+            .catch(err => {
+                console.log("Error getting followers", err)
+            })
+            
+            setFollowData(prev => {
+                return {...prev, followers: count}
+            })
+        }
+
+        async function getFollowingCount(){
+            const count = await fetch(`http://localhost:8080/getfollowingcount?userId=${state.data.id}`)
+            .then(res => res.json())
+            .catch(err => {
+                console.log("Error getting following", err)
+                return;
+            })
+
+            setFollowData(prev => {
+                return {...prev, following: count}
+            })
+        }
+
+        getFollowersCount();
+        getFollowingCount();
+    }, [navigate, state])
 
     function signout(){
         setUserData({});
         setRandomUsersData({});
         navigate("/signin");
+    }
+
+    async function followUser(){
+        const data = {
+            userId: profileData.id,
+            followerId: userData.id
+        }
+
+        const didFollow = await fetch('http://localhost:8080/followuser', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log("Error following user", err)
+            return;
+        })
+
+        if(didFollow === -1){
+            console.log("Coludn't update followers")
+        }else{
+            setFollowData(prev => {
+                return {...prev, followers: parseInt(prev.followers) + parseInt(1)}
+            })
+            setPageType(3);
+        }
+
+    }
+
+    async function unFollowUser(){
+        const data = {
+            userId: profileData.id,
+            followerId: userData.id
+        }
+
+        const didUnFollow = await fetch('http://localhost:8080/unfollowuser', {
+            method: 'delete',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log("Error unfollowing user", err)
+            return;
+        })
+        
+        if(didUnFollow === -1){
+            console.log("Coludn't update followers")
+        }else{
+            setFollowData(prev => {
+                return {...prev, followers: parseInt(prev.followers) - parseInt(1)}
+            })
+            setPageType(2);
+        }
     }
 
     return(
@@ -32,20 +167,20 @@ export default function Profile(){
                 <div id={s.profileInfo}>
 
                     <img
-                    src={user_data.image !== undefined && user_data.image !== null ? user_data.image : "/logo192.png"}
+                    src={profileData.image !== undefined && profileData.image !== null ? profileData.image : "/logo192.png"}
                     alt="profile"
                     />
                     
                     <div className={s.text}>
                         <p className={s.big}>
-                            {user_data.name !== undefined ? user_data.name : "Default Name"}
+                            {profileData.name !== undefined ? profileData.name : "Default Name"}
                         </p>
                         <p className={s.med}>
-                        @{user_data.uname !== undefined ? user_data.uname : "defaultuname"}
+                        @{profileData.uname !== undefined ? profileData.uname : "defaultuname"}
                         </p>
                     </div>
                     <div className={s.col2}>
-                        {user_data.description !== undefined ? user_data.description : "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi, suscipit. Iste voluptatum quos cumque tenetur quis! Officiis vel dolorum rer."}
+                        {profileData.description !== undefined ? profileData.description : "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Eligendi, suscipit. Iste voluptatum quos cumque tenetur quis! Officiis vel dolorum rer."}
                     </div>
                 </div>
 
@@ -56,12 +191,12 @@ export default function Profile(){
                                 navigate('/listing',{
                                     state: {
                                         type: 1,
-                                        id: user_data.id
+                                        id: profileData.id
                                     }
                                 })
                             }
                         }>
-                            {user_data.followers !== undefined ? user_data.followers : 69}
+                            {followData.followers !== undefined ? followData.followers : 69}
                         </span> Followers
                     </p>
                     <p className={s.med}>
@@ -70,27 +205,37 @@ export default function Profile(){
                                 navigate('/listing',{
                                     state: {
                                         type: 2,
-                                        id: user_data.id
+                                        id: profileData.id
                                     }
                                 })
                             }
                         }>
-                            {user_data.following !== undefined ? user_data.following : 420}
+                            {followData.following !== undefined ? followData.following : 420}
                         </span> Following
                     </p>
                 </div>
 
                 <div id={s.buttons}>
-                    {profile_type === 1 && 
+                    {pageType === 1 && 
                     <div className={s.btn} onClick={signout}>Sign Out</div>}
 
-                    {profile_type === 2 && 
-                    <div className={s.btn}>Follow</div>}
+                    {pageType === 2 && 
+                    <div
+                        className={s.btn}
+                        onClick={followUser}
+                    >
+                        Follow
+                    </div>}
 
-                    {profile_type === 3 && 
-                    <div className={`${s.btn} ${s.white}`}>Unfollow</div>}
+                    {pageType === 3 && 
+                    <div
+                        className={`${s.btn} ${s.white}`}
+                        onClick={unFollowUser}
+                    >
+                        Unfollow
+                    </div>}
                     
-                    {profile_type === 3 && 
+                    {pageType === 3 && 
                     <div className={s.btn}>Message</div>}
                 </div>
 
