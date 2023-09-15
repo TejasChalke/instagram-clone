@@ -126,6 +126,8 @@ export default function Profile(){
                 return {...prev, followers: parseInt(prev.followers) + parseInt(1)}
             })
             setPageType(3);
+
+            sendFollowNotification();
         }
 
     }
@@ -157,6 +159,27 @@ export default function Profile(){
             })
             setPageType(2);
         }
+    }
+
+    async function sendFollowNotification(){
+        const data = {
+            user: profileData.id,
+            type: "follower",
+            message: `User ${userData.name.toUpperCase()} (@${userData.uname}) has started following you.`
+        }
+
+        await fetch('http://localhost:8080/addnotification', {
+            method: 'post',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log("Error adding notification", err)
+            return;
+        })
     }
 
     return(
