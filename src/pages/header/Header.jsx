@@ -10,11 +10,28 @@ export default function Header(){
     return(
         <div id={s.headerContainer}>
             <p>Instagram</p>
-            <i className="fa-solid fa-user" onClick={() => {
-                naivgate('/profile', {
-                    state: {data: userData, type: 1}
-                })
-            }}></i>
+            <div id={s.icons}>
+                <i
+                    className="fa-solid fa-plus"
+                    onClick={() => {
+                        naivgate('/notifications')
+                    }}
+                ></i>
+                <i
+                    className="fa-solid fa-bell"
+                    onClick={() => {
+                        naivgate('/notifications')
+                    }}
+                ></i>
+                <i
+                    className="fa-solid fa-user"
+                    onClick={() => {
+                        naivgate('/profile', {
+                            state: {data: userData, type: 1}
+                        })
+                    }}
+                ></i>
+            </div>
         </div>
     )
 }

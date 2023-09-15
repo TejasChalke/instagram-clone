@@ -2,6 +2,7 @@ import './App.scss';
 import Profile from './pages/profile/Profile';
 import Search from './pages/search/Search';
 import Feed from './pages/feed/Feed';
+import Notifications from './pages/notifications/Notifications';
 import Signin from './pages/home/Signin';
 import Signup from './pages/home/Signup'
 
@@ -10,6 +11,7 @@ import { RandomUsersContext } from './contexts/RandomUsers';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 import Listing from './pages/listing/Listing';
+import NewPost from './pages/newpost/NewPost';
 
 function App() {
   //creating state of the user that might be signed in
@@ -31,6 +33,8 @@ function App() {
             <Route path='/signin' element={<Signin />} />
             <Route path='/signup' element={<Signup />} />
             <Route path='/feed' element={<Feed />} />
+            <Route path='/newpost' element={<NewPost />} />
+            <Route path='/notifications' element={<Notifications />} />
             <Route path='/search' element={<Search />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/listing' element={<Listing />} />
