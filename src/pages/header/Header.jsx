@@ -14,7 +14,7 @@ export default function Header(){
                 <i
                     className="fa-solid fa-plus"
                     onClick={() => {
-                        naivgate('/notifications')
+                        naivgate('/newpost')
                     }}
                 ></i>
                 <i

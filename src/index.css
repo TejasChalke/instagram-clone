@@ -10,6 +10,10 @@
   --med-padding: 1.5rem;
   --large-padding: 2rem;
 
+  --footer-small-padding: 2.5rem;
+  --footer-med-padding: 3rem;
+  --footer-large-padding: 3.5rem;
+
   --color-primary: #2F80ED;
   --color-primary-dark: #0d3c82;
 }
