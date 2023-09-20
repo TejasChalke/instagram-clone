@@ -1,0 +1,57 @@
+@mixin btn {
+    font-size: 1.2rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    padding: .5rem 1.5rem;
+}
+
+#newpostConatiner{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: var(--small-padding);
+    padding-bottom: var(--footer-small-padding);
+
+    #title{
+        width: 100%;
+        font-size: 1.5rem;
+        font-weight: 500;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    #imageUpload{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        #fileBtn{
+            @include btn;
+        }
+
+        img{
+            
+            margin-bottom: 1rem;
+            object-fit: cover;
+            width: 100%;
+        }
+    }
+
+    textarea{
+        resize: none;
+        width: 100%;
+        padding: .5rem;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    #submit{
+        @include btn;
+    }
+}
