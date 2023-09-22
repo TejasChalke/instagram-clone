@@ -49,7 +49,7 @@ export default function Signin(){
         setUserData(userData);
         setRandomUsersData(randomUserData);
 
-        navigate('/search');
+        navigate('/feed');
     }
 
     return(
