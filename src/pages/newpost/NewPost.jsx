@@ -27,6 +27,7 @@ export default function NewPost(){
         const formData = new FormData();
         formData.append('image', img);
         formData.append('userId', userData.id);
+        formData.append('name', userData.name);
         formData.append('description', desc);
 
         

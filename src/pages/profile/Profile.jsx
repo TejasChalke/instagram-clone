@@ -16,7 +16,7 @@ export default function Profile(){
 
 
     const {state} = useLocation();
-    const profileData = (state !== undefined && state !== null) ? state.data : {};
+    const [profileData, setProfileData] = React.useState({});
     const [followData, setFollowData] = React.useState({
         followers: 0,
         following: 0
@@ -61,6 +61,35 @@ export default function Profile(){
         if(state === undefined || state === null){
             navigate('/signin');
             return;
+        }
+
+        async function getUser(){
+            try {
+                const response = await fetch(`http://localhost:8080/getuser/${state.data.id}`,{
+                    method: 'get'
+                });
+
+                if(response.ok){
+                    setProfileData(await response.json());
+                }else{
+                    console.log("Error getting user after post click from server: " + response.statusText);
+                }
+
+            } catch (error) {
+                console.log("Error getting user after post click: " + error)
+            }
+        }
+        
+
+        // if visiting profile page after clicking on a post
+        // type will be -1 and user data will not be present
+        // so retrieve the data
+        if(state.type === -1){
+            getUser();
+        }else{
+            setProfileData(
+                (state !== undefined && state !== null) ? state.data : {}
+            )
         }
 
         async function getFollowersCount(){
