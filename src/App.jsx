@@ -2,6 +2,7 @@ import './App.scss';
 import Profile from './pages/profile/Profile';
 import Search from './pages/search/Search';
 import Feed from './pages/feed/Feed';
+import ViewPost from './pages/viewpost/ViewPost';
 import Notifications from './pages/notifications/Notifications';
 import Signin from './pages/home/Signin';
 import Signup from './pages/home/Signup'
@@ -33,6 +34,7 @@ function App() {
             <Route path='/signin' element={<Signin />} />
             <Route path='/signup' element={<Signup />} />
             <Route path='/feed' element={<Feed />} />
+            <Route path='/viewpost' element={<ViewPost />} />
             <Route path='/newpost' element={<NewPost />} />
             <Route path='/notifications' element={<Notifications />} />
             <Route path='/search' element={<Search />} />

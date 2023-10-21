@@ -9,7 +9,7 @@ export default function Header(){
 
     return(
         <div id={s.headerContainer}>
-            <p>Instagram</p>
+            <p>MySpace</p>
             <div id={s.icons}>
                 <i
                     className="fa-solid fa-plus"
