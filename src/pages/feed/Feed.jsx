@@ -19,7 +19,6 @@ export default function Feed(){
 
                 if (response.ok) {
                     const temp = await response.json();
-                    console.log(temp);
                     setPosts(temp);
                 } else {
                     console.log("Error getting posts: " + response.statusText);
@@ -44,17 +43,33 @@ export default function Feed(){
                             <div 
                                 key={idx}
                                 className={s.item}
-                                onClick={() => {
-                                    navigate('/profile', {
-                                        state: {data: {id: item.userid}, type: -1}
-                                    })
-                                }}
                             >
                                 <div className={s.data}>
-                                    <p className={s.med}>{item.name}</p>
-                                    <p className={s.med}>Likes: {item.likes}</p>
+                                    <p
+                                        className={s.med}
+                                        onClick={() => {
+                                            navigate('/profile', {
+                                                state: {data: {id: item.userid}, type: -1}
+                                            })
+                                        }}
+                                    >
+                                        {item.name}
+                                    </p>
+                                    <p
+                                        className={s.med}
+                                    >
+                                        Likes: {item.likes}
+                                    </p>
                                 </div>
-                                <img src={`data:image/jpeg;base64,${item.image}`} alt="" />
+                                <img
+                                    src={`data:image/jpeg;base64,${item.image}`}
+                                    alt=""
+                                    onClick={() => {
+                                        navigate('/viewpost', {
+                                            state: {data: item}
+                                        })
+                                    }}
+                                />
                             </div>
                         );
                     })
