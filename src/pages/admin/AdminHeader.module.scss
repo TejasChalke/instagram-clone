@@ -1,0 +1,29 @@
+#container{
+    position: sticky;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .5rem 1rem;
+    border-bottom: 2px solid rgb(114, 114, 114);
+    background-color: white;
+    z-index: 10;
+
+    p{
+        font-weight: 500;
+        font-size: 2.5rem;
+    }
+
+    #adminIcons{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        cursor: pointer;
+
+        p{
+            margin-right: .5rem;
+            font-size: 1.5rem;
+        }
+    }
+}

@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom'
 import s from './Home.module.scss'
 import { UserContext } from '../../contexts/UserContext';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { RandomUsersContext } from '../../contexts/RandomUsers';
+import { Toast } from '../toast/Toast';
 
 export default function Signin(){
     const navigate = useNavigate();
@@ -11,6 +12,10 @@ export default function Signin(){
     //change the current user
     const {setUserData} = useContext(UserContext);
     const {setRandomUsersData} = useContext(RandomUsersContext);
+
+    //messages
+    const [message, setMessage] = useState("Test message");
+    const [show, setShow] = useState(false);
 
     async function signin(){
         const data = {
@@ -30,6 +35,8 @@ export default function Signin(){
 
         if(id === -1){
             console.error("User not found!");
+            setMessage("User not found!");
+            setShow(true);
             return;
         }
 
@@ -52,9 +59,16 @@ export default function Signin(){
         navigate('/feed');
     }
 
+    if(show){
+        setTimeout(() => {
+            setShow(false);
+        }, 3500)
+    }
+
     return(
         <div id={s.container}>
-            <div className={s.title}>Login to Instagram</div>
+            {show && <Toast text={message} type="error"/>}
+            <div className={s.title}>Login to MySpace</div>
             <div id={s.form}>
                 <div className={s.formItem}>
                     <div className={s.labels}>
