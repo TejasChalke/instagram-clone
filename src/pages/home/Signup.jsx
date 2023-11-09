@@ -1,22 +1,35 @@
 import { useNavigate } from 'react-router-dom'
 import s from './Home.module.scss'
+import { useState } from 'react';
+import { Toast } from '../toast/Toast';
 
 export default function Signup(){
     const navigate = useNavigate();
 
-    async function signup(){
-        const name = document.querySelector("#signup-name").value;
-        const uname = document.querySelector("#signup-uname").value;
-        const email = document.querySelector("#signup-email").value;
-        const pass = document.querySelector("#signup-pass").value;
+    //messages
+    const [message, setMessage] = useState("Test message");
+    const [show, setShow] = useState(false);
 
+    async function signup(){
+        const name = document.querySelector("#signup-name").value.trim();
+        const uname = document.querySelector("#signup-uname").value.trim();
+        const email = document.querySelector("#signup-email").value.trim();
+        const pass = document.querySelector("#signup-pass").value.trim();
+
+        if(name.length < 3 || uname.length < 3 || email.length < 3 || pass.length < 3){
+            setMessage("Check the provided values");
+            setShow(true);
+            return;
+        }
+        
         try {
             const response = await fetch(`http://localhost:8080/getbyuname?uname=${uname}`)
 
             if(response.ok){
                 console.log("Uname is fine");
             }else{
-                console.log("Check your uname");
+                setMessage("Username already exists");
+                setShow(true);
                 return;
             }
         } catch (error) {
@@ -30,7 +43,8 @@ export default function Signup(){
             if(response.ok){
                 console.log("Email is fine");
             }else{
-                console.log("Check your email");
+                setMessage("Email already exists");
+                setShow(true);
                 return;
             }
         } catch (error) {
@@ -54,7 +68,8 @@ export default function Signup(){
                 userId = await response.json();
                 console.log("User creds added");
             }else{
-                console.log("Check your creds data");
+                setMessage("Couldn't add credentials");
+                setShow(true);
                 return;
             }
         } catch (error) {
@@ -78,7 +93,8 @@ export default function Signup(){
             if(response.ok){
                 console.log("User added");
             }else{
-                console.log("Check your user data");
+                setMessage("Couldn't add user");
+                setShow(true);
                 return;
             }
         } catch (error) {
@@ -88,9 +104,16 @@ export default function Signup(){
 
     }
 
+    if(show){
+        setTimeout(() => {
+            setShow(false);
+        }, 3500)
+    }
+
     return(
         <div id={s.container}>
-            <div className={s.title}>Sign up for Instagram</div>
+            {show && <Toast text={message} type="error"/>}
+            <div className={s.title}>Sign up for MySpace</div>
             <div id={s.form}>
                  <div className={s.formItem}>
                     <div className={s.labels}>

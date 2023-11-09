@@ -5,14 +5,16 @@ import Feed from './pages/feed/Feed';
 import ViewPost from './pages/viewpost/ViewPost';
 import Notifications from './pages/notifications/Notifications';
 import Signin from './pages/home/Signin';
-import Signup from './pages/home/Signup'
+import Signup from './pages/home/Signup';
+import Listing from './pages/listing/Listing';
+import NewPost from './pages/newpost/NewPost';
+import Admin from './pages/admin/Admin';
+import AdminLogin from './pages/admin/AdminLogin';
 
 import { UserContext } from './contexts/UserContext';
 import { RandomUsersContext } from './contexts/RandomUsers';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import Listing from './pages/listing/Listing';
-import NewPost from './pages/newpost/NewPost';
 
 function App() {
   //creating state of the user that might be signed in
@@ -40,6 +42,8 @@ function App() {
             <Route path='/search' element={<Search />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/listing' element={<Listing />} />
+            <Route path='/admin' element={<AdminLogin />} />
+            <Route path='/admin/home' element={<Admin />} />
           </Routes>
         </BrowserRouter>
       </RandomUsersContext.Provider>

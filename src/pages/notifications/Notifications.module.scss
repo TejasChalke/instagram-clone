@@ -8,6 +8,7 @@
     .notification{
         width: 100%;
         padding: 1rem;
+        margin-bottom: 1rem;
         border-radius: 10px;
         -webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.45);
         -moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.45);
@@ -26,6 +27,17 @@
         .med{
             margin-top: .5rem;
             font-size: 1.2rem;
+        }
+
+        .btn{
+            width: fit-content;
+            font-size: .8rem;
+            padding: .3rem .6rem;
+            margin-top: .5rem;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
         }
     }
 }

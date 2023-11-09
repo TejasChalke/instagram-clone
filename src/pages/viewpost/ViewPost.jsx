@@ -4,6 +4,7 @@ import Header from "../header/Header";
 import s from './ViewPost.module.scss';
 import React, { useContext, useEffect } from "react";
 import { UserContext } from "../../contexts/UserContext";
+import { Toast } from '../toast/Toast';
 
 export default function ViewPost(){
     const {state} = useLocation();
@@ -13,14 +14,22 @@ export default function ViewPost(){
     // retrieve comments
     const [comments, setComments] = React.useState([]);
 
+    //messages
+    const [message, setMessage] = React.useState("Test message");
+    const [show, setShow] = React.useState(false);
+
     useEffect(() => {
+        if(userData.id === undefined){
+            navigate('/signin');
+            return;
+        }
+
         async function getComments(){
             try {
                 const response = await fetch(`http://localhost:8080/getcomments?pid=${state.data.id}`);
     
                 if (response.ok) {
                     setComments(await response.json());
-                    console.log("Comments retrieved");
                 } else {
                     console.log("Error getting comment: " + response.statusText);
                 }
@@ -30,13 +39,12 @@ export default function ViewPost(){
         }
 
         getComments();
-    }, [state.data.id]);
+    }, [state.data.id, navigate, userData]);
 
     async function addComment(){
         const comment = document.querySelector("#commentInput").value;
 
         if(comment.trim().length < 3) return;
-
         
         const formData = new FormData();
         formData.append('comment', comment);
@@ -51,9 +59,8 @@ export default function ViewPost(){
             });
 
             if (response.ok) {
-                const commentId = await response.json();
+                await response.json();
                 document.querySelector("#commentInput").value = "";
-                console.log("Comment added: " + commentId);
             } else {
                 console.log("Error adding comment: " + response.statusText);
             }
@@ -69,9 +76,7 @@ export default function ViewPost(){
             const response = await fetch(`http://localhost:8080/getcomments?pid=${state.data.id}`);
 
             if (response.ok) {
-                // console.log(await response.json());
                 setComments(await response.json());
-                console.log("Comments retrieved");
             } else {
                 console.log("Error getting comment: " + response.statusText);
             }
@@ -82,13 +87,14 @@ export default function ViewPost(){
 
     async function reportComment(id, comment){
         try {
-            const response = await fetch(`http://localhost:5000/analyze?text=${comment}`);
+            const response = await fetch(`http://localhost:5000/predict_sentiment?text=${comment}`);
             
             if (response.ok) {
                 const data = await response.json();
 
-                if(data.score > -0.2){
-                    console.log("the comment is fine");
+                if(data.sentiment === 1){
+                    setMessage("The comment seems fine");
+                    setShow(true);
                     return;
                 }
                 
@@ -99,25 +105,87 @@ export default function ViewPost(){
             console.error("Error in report request: " + err.message);
         }
         
-
-        // if score is bad then delete comment
+        // delete and retrieve the comment
+        let retrieved = null;
         try {
-            const response = await fetch(`http://localhost:8080/deletecomment?id=${id}`);
-
+            const response = await fetch(`http://localhost:8080/deleteandgetcomment?id=${id}`);
             if (response.ok) {
-                console.log("Comment deleted");
+                setMessage("Comment will be validated");
+                setShow(true);
+                retrieved = await response.json();
             } else {
                 console.log("Error deleting comment: " + response.statusText);
+                return;
             }
         } catch (err) {
             console.error("Error in making delete request: " + err.message);
+            return;
         }
+        
+        // save the comment in the new table
+        const formdata = new FormData();
+
+        if(retrieved !== null){
+            formdata.append('userId', retrieved.userId);
+            formdata.append('postId', retrieved.postId);
+            formdata.append('uname', retrieved.uname);
+            formdata.append('comment', retrieved.comment);
+        }else{
+            console.log("Couldn't retreive comment to be deleted");
+            return;
+        }
+        
+        try {
+            const response = await fetch("http://localhost:8080/addpendingcomment", {
+                method: 'POST',
+                body: formdata,
+            });
+
+            if (response.ok) {
+                document.querySelector("#commentInput").value = "";
+            } else {
+                console.log("Error adding pending comment: " + response.statusText);
+                return;
+            }
+        } catch (err) {
+            console.error("Error in request for adding pending comment: " + err.message);
+            return;
+        }
+
+        // send a notification to the user
+        const notifyData = {
+            user: retrieved.userId,
+            type: "report",
+            message: `Your comment "${retrieved.comment}" has been reported.`
+        };
+
+        await fetch('http://localhost:8080/addnotification', {
+            method: 'post',
+            body: JSON.stringify(notifyData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .catch(err => {
+            console.log("Error adding report notification", err)
+            return;
+        })
+
+        changeComments();
+    }
+
+    if(show){
+        setTimeout(() => {
+            setShow(false);
+        }, 3500)
     }
 
     return(
         <>
             <Header />
                 <div id={s.postConatiner}>
+                    {show && <Toast text={message}/>}
                     <img
                         src={`data:image/jpeg;base64,${state.data.image}`}
                         alt=""
@@ -149,7 +217,7 @@ export default function ViewPost(){
                             comments.length !== 0 && 
                             comments.map((comment, idx) => {
                                 return (
-                                    <div className={s.item}>
+                                    <div key={idx} className={s.item}>
                                         <div className={s.itemHeader}>
                                             <
                                                 p
